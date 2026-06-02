@@ -550,6 +550,14 @@ input {
   padding-top: 18px;
 }
 
+.application-global-config-page .general-settings-panel {
+  padding-top: 0;
+}
+
+.security-config-page-panel .general-settings-content {
+  padding-top: 0;
+}
+
 .permission-layout {
   padding-top: 18px;
 }
@@ -1094,6 +1102,101 @@ input {
 
 .mail-settings-panel {
   max-width: 680px;
+}
+
+.mail-settings-mode-panel {
+  max-width: 680px;
+}
+
+.mail-config-mode-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mail-config-mode-row .ant-radio-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.mail-config-mode-row .ant-radio-wrapper {
+  margin-inline-end: 0;
+  font-size: 14px;
+  color: #1f2a44;
+}
+
+.security-settings-panel {
+  width: 680px;
+  max-width: 680px;
+}
+
+.security-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.security-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 680px;
+  max-width: 100%;
+}
+
+.security-form-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #1f2a44;
+  text-align: left;
+}
+
+.security-form-label .anticon {
+  color: #98a2b3;
+  font-size: 14px;
+}
+
+.security-form-control {
+  min-width: 0;
+  width: 680px;
+  max-width: 100%;
+}
+
+.security-form-control .ant-select {
+  width: 100%;
+}
+
+.security-form-control .ant-input,
+.security-form-control .ant-input-affix-wrapper,
+.security-form-control .ant-select-selector,
+.security-form-control .ant-input-textarea textarea {
+  border-radius: 4px !important;
+  border-color: #d0d5dd !important;
+  box-shadow: none !important;
+}
+
+.security-form-control .ant-select-single {
+  height: 32px;
+}
+
+.security-form-control .ant-select-single .ant-select-selector {
+  display: flex;
+  align-items: center;
+}
+
+.security-form-control .ant-input,
+.security-form-control .ant-input-affix-wrapper input,
+.security-form-control .ant-select-selection-item,
+.security-form-control .ant-select-selection-placeholder,
+.security-form-control .ant-input-textarea textarea {
+  font-size: 14px;
 }
 
 .mail-section-title {

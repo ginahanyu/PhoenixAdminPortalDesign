@@ -4,6 +4,7 @@ import { UserPage } from './pages/UserPage';
 import { RolePage } from './pages/RolePage';
 import { AppManagementPage } from './pages/AppManagementPage';
 import { ApplicationDetailPage } from './pages/ApplicationDetailPage';
+import { ApplicationGlobalConfigPage } from './pages/ApplicationGlobalConfigPage';
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/users" element={<UserPage />} />
         <Route path="/roles" element={<RolePage />} />
         <Route path="/applications" element={<AppManagementPage />} />
+        <Route path="/applications/global-config" element={<ApplicationGlobalConfigPage />} />
         <Route path="/applications/:appKey" element={<ApplicationDetailPage />} />
       </Routes>
     </AdminLayout>

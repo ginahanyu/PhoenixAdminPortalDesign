@@ -5,9 +5,9 @@ import {
   MoreOutlined,
   PauseCircleOutlined,
   PlayCircleOutlined,
-  ReloadOutlined,
   RocketOutlined,
   AppstoreOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { applications as initialApplications, type AppItem } from '../data/mock';
@@ -37,30 +37,10 @@ export function AppManagementPage() {
   return (
     <div className="app-page">
       <div className="stats-grid">
-        <StatCard
-          icon={<AppstoreOutlined />}
-          tone="blue"
-          label="总应用数"
-          value={stats.total}
-        />
-        <StatCard
-          icon={<PlayCircleOutlined />}
-          tone="green"
-          label="运行中"
-          value={stats.running}
-        />
-        <StatCard
-          icon={<PauseCircleOutlined />}
-          tone="gray"
-          label="已停止"
-          value={stats.stopped}
-        />
-        <StatCard
-          icon={<ExclamationCircleOutlined />}
-          tone="red"
-          label="异常"
-          value={stats.abnormal}
-        />
+        <StatCard icon={<AppstoreOutlined />} tone="blue" label="总应用数" value={stats.total} />
+        <StatCard icon={<PlayCircleOutlined />} tone="green" label="运行中" value={stats.running} />
+        <StatCard icon={<PauseCircleOutlined />} tone="gray" label="已停止" value={stats.stopped} />
+        <StatCard icon={<ExclamationCircleOutlined />} tone="red" label="异常" value={stats.abnormal} />
       </div>
 
       <div className="list-section-heading">
@@ -74,9 +54,11 @@ export function AppManagementPage() {
           >
             离线应用发布
           </Button>
-          <Button className="light-action-button" icon={<ReloadOutlined />} onClick={() => message.success('刷新完成')}>
-            刷新
-          </Button>
+          <Link to="/applications/global-config">
+            <Button className="light-action-button" icon={<SettingOutlined />}>
+              应用全局配置
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -144,7 +126,7 @@ export function AppManagementPage() {
 
         <button type="button" className="page-size-button">
           10 条/页
-          <span>⌄</span>
+          <span>▾</span>
         </button>
       </div>
     </div>

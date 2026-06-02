@@ -43,6 +43,7 @@ const pageTitles: Record<string, string> = {
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
+  const globalConfigMatch = useMatch('/applications/global-config');
   const applicationMatch = useMatch('/applications/:appKey');
 
   const selectedKey = location.pathname.includes('/roles')
@@ -51,9 +52,11 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       ? 'applications'
       : 'users';
 
-  const applicationTitle = applicationMatch
-    ? applications.find((item) => item.key === applicationMatch.params.appKey)?.name ?? '应用'
-    : null;
+  const applicationTitle = globalConfigMatch
+    ? '应用全局配置'
+    : applicationMatch
+      ? applications.find((item) => item.key === applicationMatch.params.appKey)?.name ?? '应用'
+      : null;
 
   return (
     <div className="admin-shell">
