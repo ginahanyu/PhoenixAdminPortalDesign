@@ -5,7 +5,7 @@ FROM nginx:alpine
 ADD nginx.conf /etc/nginx/conf.d/default.conf
 
 # 复制本地已构建好的文件到 nginx 目录
-ADD ./build /usr/share/nginx/html
+ADD ./dist /usr/share/nginx/html
 
 # 暴露端口
 EXPOSE 80
