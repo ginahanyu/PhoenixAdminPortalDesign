@@ -2,7 +2,7 @@ import {
   AppstoreOutlined,
   DownOutlined,
   LeftOutlined,
-  MonitorOutlined,
+  SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import type { ReactNode } from 'react';
@@ -29,9 +29,10 @@ const menuLinks: MenuLink[] = [
     icon: <AppstoreOutlined />,
   },
   {
-    key: 'monitor',
-    label: '系统监控',
-    icon: <MonitorOutlined />,
+    key: 'config',
+    label: '配置',
+    path: '/config',
+    icon: <SettingOutlined />,
   },
 ];
 
@@ -39,24 +40,24 @@ const pageTitles: Record<string, string> = {
   users: '用户',
   roles: '角色',
   applications: '应用管理',
+  config: '配置',
 };
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const globalConfigMatch = useMatch('/applications/global-config');
   const applicationMatch = useMatch('/applications/:appKey');
 
   const selectedKey = location.pathname.includes('/roles')
     ? 'roles'
     : location.pathname.includes('/applications')
       ? 'applications'
-      : 'users';
+      : location.pathname.includes('/config')
+        ? 'config'
+        : 'users';
 
-  const applicationTitle = globalConfigMatch
-    ? '应用全局配置'
-    : applicationMatch
-      ? applications.find((item) => item.key === applicationMatch.params.appKey)?.name ?? '应用'
-      : null;
+  const applicationTitle = applicationMatch
+    ? applications.find((item) => item.key === applicationMatch.params.appKey)?.name ?? '应用'
+    : null;
 
   return (
     <div className="admin-shell">

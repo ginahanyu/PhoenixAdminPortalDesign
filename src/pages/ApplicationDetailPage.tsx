@@ -8,21 +8,30 @@ import {
 } from '@ant-design/icons';
 import { Button, Input, Radio } from 'antd';
 import { useMemo, useState } from 'react';
-import { MailServerConfigPanel } from '../components/MailServerConfigPanel';
+import { DiagnosticLogLevelPanel } from '../components/DiagnosticLogLevelPanel';
 import { SecurityConfigPanel } from '../components/SecurityConfigPanel';
+import {
+  defaultSecuritySettings,
+  useSecuritySettings,
+  type SecuritySettings,
+} from '../components/SecuritySettingsContext';
+import {
+  useDiagnosticSettings,
+  type DiagnosticLogLevel,
+} from '../components/DiagnosticSettingsContext';
 
 const tabs = [
   { key: 'general', label: '常规设置' },
   { key: 'permission', label: '权限设置' },
   { key: 'datasource', label: '数据源' },
   { key: 'schedule', label: '计划任务' },
-  { key: 'security', label: '安全配置' },
+  { key: 'security', label: '安全设置' },
+  { key: 'log', label: '日志' },
 ] as const;
 
 const generalTabs = [
   { key: 'login', label: '登录设置' },
   { key: 'custom', label: '自定义设置' },
-  { key: 'mail', label: '邮件服务器配置' },
 ] as const;
 
 const customRows = [
@@ -33,7 +42,7 @@ const customRows = [
     value: 'aaa',
     encrypted: '否',
   },
-];
+] as const;
 
 const dataSources = [
   {
@@ -129,12 +138,17 @@ const permissionTree = [
 ] as const;
 
 export function ApplicationDetailPage() {
+  const { globalSecuritySettings } = useSecuritySettings();
+  const { globalLogLevel } = useDiagnosticSettings();
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]['key']>('general');
   const [activeGeneralTab, setActiveGeneralTab] =
     useState<(typeof generalTabs)[number]['key']>('login');
   const [loginMode, setLoginMode] = useState('normal');
-  const [mailConfigMode, setMailConfigMode] = useState<'global' | 'custom'>('global');
-  const [securityConfigMode, setSecurityConfigMode] = useState<'global' | 'custom'>('global');
+  const [securityMode, setSecurityMode] = useState<'global' | 'custom'>('global');
+  const [customSecuritySettings, setCustomSecuritySettings] =
+    useState<SecuritySettings>(defaultSecuritySettings);
+  const [logMode, setLogMode] = useState<'global' | 'custom'>('global');
+  const [customLogLevel, setCustomLogLevel] = useState<DiagnosticLogLevel>('info');
   const [permissionViewMode, setPermissionViewMode] = useState<'role' | 'group'>('role');
   const [permissionKeyword, setPermissionKeyword] = useState('');
   const [selectedPermissionSubject, setSelectedPermissionSubject] = useState('匿名用户');
@@ -174,6 +188,20 @@ export function ApplicationDetailPage() {
     scheduleTasks.find((item) => item.key === selectedTaskKey) ??
     filteredScheduleTasks[0] ??
     scheduleTasks[0];
+
+  const handleSecurityModeChange = (nextMode: 'global' | 'custom') => {
+    setSecurityMode(nextMode);
+    if (nextMode === 'custom') {
+      setCustomSecuritySettings(defaultSecuritySettings);
+    }
+  };
+
+  const handleLogModeChange = (nextMode: 'global' | 'custom') => {
+    setLogMode(nextMode);
+    if (nextMode === 'custom') {
+      setCustomLogLevel('info');
+    }
+  };
 
   return (
     <div className="app-detail-page">
@@ -385,24 +413,6 @@ export function ApplicationDetailPage() {
                   </div>
                 </div>
               ) : null}
-
-              {activeGeneralTab === 'mail' ? (
-                <div className="mail-settings-mode-panel">
-                  <div className="mail-config-mode-row">
-                    <div className="field-label plain-label">配置方式</div>
-                    <Radio.Group
-                      value={mailConfigMode}
-                      onChange={(event) => setMailConfigMode(event.target.value)}
-                    >
-                      <Radio value="global">使用应用全局配置</Radio>
-                      <Radio value="custom">自定义</Radio>
-                    </Radio.Group>
-                  </div>
-
-                  {mailConfigMode === 'custom' ? <MailServerConfigPanel /> : null}
-                </div>
-              ) : null}
-
             </div>
           </div>
         ) : null}
@@ -599,22 +609,54 @@ export function ApplicationDetailPage() {
         {activeTab === 'security' ? (
           <div className="general-settings-panel security-config-page-panel">
             <div className="general-settings-content">
-              <div className="mail-settings-mode-panel">
-                <div className="mail-config-mode-row">
+              <div className="security-mode-panel">
+                <div className="security-mode-row">
                   <div className="field-label plain-label">配置方式</div>
                   <Radio.Group
-                    value={securityConfigMode}
-                    onChange={(event) => setSecurityConfigMode(event.target.value)}
+                    value={securityMode}
+                    onChange={(event) =>
+                      handleSecurityModeChange(event.target.value as 'global' | 'custom')
+                    }
                   >
-                    <Radio value="global">使用应用全局配置</Radio>
+                    <Radio value="global">使用全局设置</Radio>
                     <Radio value="custom">自定义</Radio>
                   </Radio.Group>
                 </div>
 
-                {securityConfigMode === 'global' ? (
-                  <SecurityConfigPanel disabled showSaveButton={false} />
+                {securityMode === 'global' ? (
+                  <SecurityConfigPanel value={globalSecuritySettings} disabled showSaveButton={false} />
                 ) : (
-                  <SecurityConfigPanel />
+                  <SecurityConfigPanel
+                    value={customSecuritySettings}
+                    onChange={setCustomSecuritySettings}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {activeTab === 'log' ? (
+          <div className="general-settings-panel security-config-page-panel">
+            <div className="general-settings-content">
+              <div className="security-mode-panel">
+                <div className="security-mode-row">
+                  <div className="field-label plain-label">配置方式</div>
+                  <Radio.Group
+                    value={logMode}
+                    onChange={(event) =>
+                      handleLogModeChange(event.target.value as 'global' | 'custom')
+                    }
+                  >
+                    <Radio value="global">使用全局设置</Radio>
+                    <Radio value="custom">自定义</Radio>
+                  </Radio.Group>
+                </div>
+
+                {logMode === 'global' ? (
+                  <DiagnosticLogLevelPanel value={globalLogLevel} disabled showSaveButton={false} />
+                ) : (
+                  <DiagnosticLogLevelPanel value={customLogLevel} onChange={setCustomLogLevel} />
                 )}
               </div>
             </div>
