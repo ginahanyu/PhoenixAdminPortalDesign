@@ -550,12 +550,33 @@ input {
   padding-top: 18px;
 }
 
-.application-global-config-page .general-settings-panel {
+.security-config-page-panel .general-settings-content {
   padding-top: 0;
 }
 
-.security-config-page-panel .general-settings-content {
-  padding-top: 0;
+.security-mode-panel {
+  width: 680px;
+  max-width: 100%;
+}
+
+.security-mode-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.security-mode-row .ant-radio-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.security-mode-row .ant-radio-wrapper {
+  margin-inline-end: 0;
+  font-size: 14px;
+  color: #1f2a44;
 }
 
 .permission-layout {
@@ -1063,7 +1084,7 @@ input {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 4px;
 }
 
 .plain-label {
@@ -1112,8 +1133,8 @@ input {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 4px;
+  margin-bottom: 16px;
 }
 
 .mail-config-mode-row .ant-radio-group {
@@ -1133,16 +1154,33 @@ input {
   max-width: 680px;
 }
 
+.security-settings-group {
+  width: 680px;
+  max-width: 100%;
+}
+
+.security-settings-group-spacing {
+  margin-top: 24px;
+}
+
+.security-settings-group-title {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 600;
+  color: #1f2a44;
+  margin-bottom: 14px;
+}
+
 .security-form-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .security-form-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   width: 680px;
   max-width: 100%;
 }
@@ -1213,14 +1251,14 @@ input {
 .mail-form-grid {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   margin-top: 14px;
 }
 
 .mail-form-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .mail-form-item label {
@@ -1414,6 +1452,257 @@ input {
   gap: 20px;
 }
 
+.config-page {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 24px;
+  min-height: calc(100vh - 92px);
+}
+
+.config-sidebar {
+  border-right: 1px solid #e7e9ef;
+  padding-right: 20px;
+}
+
+.config-sidebar-title {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.config-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.config-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.config-menu-item,
+.config-submenu-item {
+  width: 100%;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #344054;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.config-menu-item {
+  min-height: 36px;
+  padding: 7px 12px;
+}
+
+.config-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.config-submenu-item {
+  min-height: 34px;
+  padding: 6px 12px 6px 28px;
+}
+
+.config-menu-item:hover,
+.config-submenu-item:hover {
+  background: #f5f8ff;
+}
+
+.config-menu-item.is-active,
+.config-submenu-item.is-active {
+  background: #edf4ff;
+  color: #2a78f6;
+}
+
+.config-content {
+  min-width: 0;
+  padding-left: 4px;
+}
+
+.diagnostic-page-content {
+  padding-top: 14px;
+}
+
+.diagnostic-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 34px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e7e9ef;
+}
+
+.diagnostic-tab {
+  position: relative;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #101828;
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.diagnostic-tab.is-active {
+  color: #2a78f6;
+}
+
+.diagnostic-tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -13px;
+  height: 2px;
+  background: #2a78f6;
+}
+
+.config-placeholder-card {
+  width: 680px;
+  max-width: 100%;
+}
+
+.config-placeholder-title {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 600;
+  color: #1f2a44;
+}
+
+.config-placeholder-text {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #667085;
+}
+
+.user-db-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.user-db-connection-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 680px;
+  max-width: 100%;
+}
+
+.user-db-connection-input {
+  flex: 1;
+}
+
+.diagnostic-level-panel {
+  width: 680px;
+  max-width: 100%;
+}
+
+.diagnostic-logs-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diagnostic-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.diagnostic-filter-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diagnostic-filter-label {
+  font-size: 14px;
+  line-height: 22px;
+  color: #101828;
+  white-space: nowrap;
+}
+
+.diagnostic-select {
+  width: 180px;
+}
+
+.diagnostic-select-wide {
+  width: 260px;
+}
+
+.diagnostic-date {
+  width: 200px;
+}
+
+.diagnostic-filter-keyword .ant-input {
+  width: 180px;
+}
+
+.diagnostic-toolbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.diagnostic-settings-icon {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: #2a78f6;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.diagnostic-log-shell {
+  height: 790px;
+  overflow: auto;
+  border: 1px solid #d0d5dd;
+  background: #ffffff;
+}
+
+.diagnostic-log-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 1800px;
+  padding: 4px 16px;
+  border-bottom: 1px solid #eef1f5;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.diagnostic-log-time {
+  color: #3f8c29;
+}
+
+.diagnostic-log-level {
+  color: #f04438;
+}
+
+.diagnostic-log-text {
+  color: #101828;
+}
+
+.diagnostic-log-link {
+  color: #2a78f6;
+  text-decoration: underline;
+}
+
 .stat-card {
   min-height: 98px;
   padding: 24px 36px;
@@ -1545,4 +1834,19 @@ input {
 
 .ant-modal .ant-btn {
   border-radius: 6px;
+}
+
+.admin-content .ant-form-vertical .ant-form-item,
+.ant-modal .ant-form-vertical .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.admin-content .ant-form-vertical .ant-form-item-label,
+.ant-modal .ant-form-vertical .ant-form-item-label {
+  padding: 0 0 4px;
+}
+
+.admin-content .ant-form-vertical .ant-form-item:last-child,
+.ant-modal .ant-form-vertical .ant-form-item:last-child {
+  margin-bottom: 0;
 }

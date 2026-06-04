@@ -7,7 +7,6 @@ import {
   PlayCircleOutlined,
   RocketOutlined,
   AppstoreOutlined,
-  SettingOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { applications as initialApplications, type AppItem } from '../data/mock';
@@ -54,11 +53,6 @@ export function AppManagementPage() {
           >
             离线应用发布
           </Button>
-          <Link to="/applications/global-config">
-            <Button className="light-action-button" icon={<SettingOutlined />}>
-              应用全局配置
-            </Button>
-          </Link>
         </div>
       </div>
 
