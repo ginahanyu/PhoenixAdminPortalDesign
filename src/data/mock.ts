@@ -93,3 +93,63 @@ export const applications: AppItem[] = [
     version: '-',
   },
 ];
+
+export type CloudStorageCapability = {
+  key: string;
+  label: string;
+};
+
+export type CloudStorageItem = {
+  key: string;
+  name: string;
+  provider: string;
+  capabilities: CloudStorageCapability[];
+  updatedAt: string;
+  region: string;
+  bucket: string;
+  accessKey: string;
+  secretKey: string;
+  domain: string;
+};
+
+export const cloudStorages: CloudStorageItem[] = [
+  {
+    key: 'storage-1',
+    name: '111',
+    provider: 'Mock Cloud Storage',
+    capabilities: [{ key: 'basic-file', label: '基础文件操作' }],
+    updatedAt: '2026/6/9 10:15:26',
+    region: 'cn-east-1',
+    bucket: 'mock-storage-assets',
+    accessKey: 'mock-access-key-01',
+    secretKey: 'mock-secret-key-01',
+    domain: 'https://mock-storage.example.com',
+  },
+  {
+    key: 'storage-2',
+    name: '人大多发货单号发给',
+    provider: 'Mock Cloud Storage',
+    capabilities: [{ key: 'basic-file', label: '基础文件操作' }],
+    updatedAt: '2026/6/9 10:26:11',
+    region: 'cn-north-1',
+    bucket: 'shipment-documents',
+    accessKey: 'mock-access-key-02',
+    secretKey: 'mock-secret-key-02',
+    domain: 'https://shipment-storage.example.com',
+  },
+  {
+    key: 'storage-3',
+    name: '七牛云',
+    provider: 'Qiniu Kodo',
+    capabilities: [
+      { key: 'public-url', label: '公开 URL' },
+      { key: 'read-write', label: '读/写' },
+    ],
+    updatedAt: '2026/6/9 15:34:09',
+    region: 'z0',
+    bucket: 'phoenix-admin',
+    accessKey: 'qiniu-access-key',
+    secretKey: 'qiniu-secret-key',
+    domain: 'https://cdn.phoenix-admin.example.com',
+  },
+];

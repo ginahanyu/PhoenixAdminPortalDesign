@@ -1,10 +1,13 @@
 import { Button, Input, Select } from 'antd';
 import { useState } from 'react';
+import { AttachmentStorageSettingsPanel } from '../components/AttachmentStorageSettingsPanel';
 import { DiagnosticLogLevelPanel } from '../components/DiagnosticLogLevelPanel';
 import { useDiagnosticSettings } from '../components/DiagnosticSettingsContext';
 import { MailServerConfigPanel } from '../components/MailServerConfigPanel';
 import { SecurityConfigPanel } from '../components/SecurityConfigPanel';
 import { useSecuritySettings } from '../components/SecuritySettingsContext';
+import { useStorageSettings } from '../components/StorageSettingsContext';
+import { CloudStoragePage } from './CloudStoragePage';
 
 const configMenu = [
   { key: 'mail-server', label: '邮件服务' },
@@ -18,17 +21,19 @@ const configMenu = [
 
 type ConfigKey =
   | 'mail-server'
+  | 'cloud-storage'
   | 'security-settings'
   | 'diagnostic-log-level'
   | 'backup-restore'
   | 'storage-path'
-  | 'user-db'
-  | 'cloud-storage';
+  | 'user-db';
 
 export function ConfigPage() {
   const [selectedKey, setSelectedKey] = useState<ConfigKey>('mail-server');
   const { globalSecuritySettings, setGlobalSecuritySettings } = useSecuritySettings();
   const { globalLogLevel, setGlobalLogLevel } = useDiagnosticSettings();
+  const { globalAttachmentStorageSettings, setGlobalAttachmentStorageSettings } =
+    useStorageSettings();
 
   return (
     <div className="config-page">
@@ -51,6 +56,13 @@ export function ConfigPage() {
       <section className="config-content">
         {selectedKey === 'mail-server' ? <MailServerConfigPanel /> : null}
 
+        {selectedKey === 'cloud-storage' ? (
+          <div>
+            <div className="config-placeholder-title">云存储配置</div>
+            <CloudStoragePage />
+          </div>
+        ) : null}
+
         {selectedKey === 'security-settings' ? (
           <SecurityConfigPanel
             value={globalSecuritySettings}
@@ -70,20 +82,14 @@ export function ConfigPage() {
         ) : null}
 
         {selectedKey === 'storage-path' ? (
-          <ConfigPlaceholder
-            title="存储路径"
-            description="这里可以配置附件、日志、缓存等服务端存储目录。"
+          <AttachmentStorageSettingsPanel
+            title="附件存储设置"
+            value={globalAttachmentStorageSettings}
+            onChange={setGlobalAttachmentStorageSettings}
           />
         ) : null}
 
         {selectedKey === 'user-db' ? <UserDatabaseConfigPanel /> : null}
-
-        {selectedKey === 'cloud-storage' ? (
-          <ConfigPlaceholder
-            title="云存储"
-            description="这里可以配置对象存储服务、访问密钥以及默认存储桶。"
-          />
-        ) : null}
       </section>
     </div>
   );

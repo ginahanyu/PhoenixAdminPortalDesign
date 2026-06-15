@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Input, Radio } from 'antd';
 import { useMemo, useState } from 'react';
+import { AttachmentStorageSettingsPanel } from '../components/AttachmentStorageSettingsPanel';
 import { DiagnosticLogLevelPanel } from '../components/DiagnosticLogLevelPanel';
 import { SecurityConfigPanel } from '../components/SecurityConfigPanel';
 import {
@@ -15,6 +16,11 @@ import {
   useSecuritySettings,
   type SecuritySettings,
 } from '../components/SecuritySettingsContext';
+import {
+  defaultAttachmentStorageSettings,
+  useStorageSettings,
+  type AttachmentStorageSettings,
+} from '../components/StorageSettingsContext';
 import {
   useDiagnosticSettings,
   type DiagnosticLogLevel,
@@ -30,8 +36,9 @@ const tabs = [
 ] as const;
 
 const generalTabs = [
-  { key: 'login', label: '登录设置' },
+  { key: 'login', label: '基本设置' },
   { key: 'custom', label: '自定义设置' },
+  { key: 'attachment-storage', label: '附件存储设置' },
 ] as const;
 
 const customRows = [
@@ -94,31 +101,31 @@ const dataSources = [
 const scheduleTasks = [
   {
     key: 'task1',
-    folder: '文件夹A / 文件夹B',
+    folder: '文件夹1 / 文件夹2',
     name: '定时同步用户信息',
     enabled: '已启用',
-    triggerDetail: '每1小时执行一次',
+    triggerDetail: '每 1 小时执行一次',
     status: '已启用',
     description: '无',
     scheduleType: '定时触发（按小时）',
     startTime: '2026-02-11 00:00:00',
     endTime: '-',
-    detail: '每1小时执行一次',
+    detail: '每 1 小时执行一次',
     timeout: '不限制',
     priority: '中',
   },
   {
     key: 'task2',
-    folder: '文件夹A / 文件夹B',
+    folder: '文件夹1 / 文件夹2',
     name: '定时同步自动测试数据',
     enabled: '已启用',
-    triggerDetail: '每1小时执行一次',
+    triggerDetail: '每 1 小时执行一次',
     status: '已启用',
     description: '无',
     scheduleType: '定时触发（按小时）',
     startTime: '2026-02-11 00:00:00',
     endTime: '-',
-    detail: '每1小时执行一次',
+    detail: '每 1 小时执行一次',
     timeout: '不限制',
     priority: '中',
   },
@@ -140,6 +147,7 @@ const permissionTree = [
 export function ApplicationDetailPage() {
   const { globalSecuritySettings } = useSecuritySettings();
   const { globalLogLevel } = useDiagnosticSettings();
+  const { globalAttachmentStorageSettings } = useStorageSettings();
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]['key']>('general');
   const [activeGeneralTab, setActiveGeneralTab] =
     useState<(typeof generalTabs)[number]['key']>('login');
@@ -149,6 +157,9 @@ export function ApplicationDetailPage() {
     useState<SecuritySettings>(defaultSecuritySettings);
   const [logMode, setLogMode] = useState<'global' | 'custom'>('global');
   const [customLogLevel, setCustomLogLevel] = useState<DiagnosticLogLevel>('info');
+  const [attachmentStorageMode, setAttachmentStorageMode] = useState<'global' | 'custom'>('global');
+  const [customAttachmentStorageSettings, setCustomAttachmentStorageSettings] =
+    useState<AttachmentStorageSettings>(defaultAttachmentStorageSettings);
   const [permissionViewMode, setPermissionViewMode] = useState<'role' | 'group'>('role');
   const [permissionKeyword, setPermissionKeyword] = useState('');
   const [selectedPermissionSubject, setSelectedPermissionSubject] = useState('匿名用户');
@@ -200,6 +211,13 @@ export function ApplicationDetailPage() {
     setLogMode(nextMode);
     if (nextMode === 'custom') {
       setCustomLogLevel('info');
+    }
+  };
+
+  const handleAttachmentStorageModeChange = (nextMode: 'global' | 'custom') => {
+    setAttachmentStorageMode(nextMode);
+    if (nextMode === 'custom') {
+      setCustomAttachmentStorageSettings(globalAttachmentStorageSettings);
     }
   };
 
@@ -257,7 +275,7 @@ export function ApplicationDetailPage() {
                   {permissionTree.map((group) => (
                     <div key={group.key} className="permission-tree-group">
                       <div className="permission-tree-group-title">
-                        <span className="permission-tree-arrow">▾</span>
+                        <span className="permission-tree-arrow">▼</span>
                         <FolderOpenOutlined />
                         <span>{group.label}</span>
                       </div>
@@ -270,7 +288,7 @@ export function ApplicationDetailPage() {
                             className={`permission-tree-item ${selectedPermissionSubject === item ? 'is-active' : ''}`}
                             onClick={() => setSelectedPermissionSubject(item)}
                           >
-                            <span className="permission-tree-item-icon">▸</span>
+                            <span className="permission-tree-item-icon">•</span>
                             <span>{item}</span>
                           </button>
                         ))}
@@ -413,6 +431,38 @@ export function ApplicationDetailPage() {
                   </div>
                 </div>
               ) : null}
+
+              {activeGeneralTab === 'attachment-storage' ? (
+                <div className="security-mode-panel">
+                    <div className="security-mode-row">
+                      <div className="field-label plain-label">配置方式</div>
+                      <Radio.Group
+                        value={attachmentStorageMode}
+                        onChange={(event) =>
+                          handleAttachmentStorageModeChange(event.target.value as 'global' | 'custom')
+                        }
+                      >
+                        <Radio value="global">使用全局配置</Radio>
+                        <Radio value="custom">自定义</Radio>
+                      </Radio.Group>
+                    </div>
+
+                    {attachmentStorageMode === 'global' ? (
+                      <AttachmentStorageSettingsPanel
+                        title="附件存储设置"
+                        value={globalAttachmentStorageSettings}
+                        disabled
+                        showSaveButton={false}
+                      />
+                    ) : (
+                      <AttachmentStorageSettingsPanel
+                        title="附件存储设置"
+                        value={customAttachmentStorageSettings}
+                        onChange={setCustomAttachmentStorageSettings}
+                      />
+                    )}
+                </div>
+              ) : null}
             </div>
           </div>
         ) : null}
@@ -537,7 +587,7 @@ export function ApplicationDetailPage() {
                     <tr className="schedule-folder-row">
                       <td colSpan={3}>
                         <span className="schedule-folder-content">
-                          <span className="schedule-folder-toggle">▾</span>
+                          <span className="schedule-folder-toggle">▼</span>
                           <FolderOpenOutlined />
                           <span>{selectedTask.folder}</span>
                         </span>
@@ -618,7 +668,7 @@ export function ApplicationDetailPage() {
                       handleSecurityModeChange(event.target.value as 'global' | 'custom')
                     }
                   >
-                    <Radio value="global">使用全局设置</Radio>
+                    <Radio value="global">使用全局配置</Radio>
                     <Radio value="custom">自定义</Radio>
                   </Radio.Group>
                 </div>
@@ -648,7 +698,7 @@ export function ApplicationDetailPage() {
                       handleLogModeChange(event.target.value as 'global' | 'custom')
                     }
                   >
-                    <Radio value="global">使用全局设置</Radio>
+                    <Radio value="global">使用全局配置</Radio>
                     <Radio value="custom">自定义</Radio>
                   </Radio.Group>
                 </div>
