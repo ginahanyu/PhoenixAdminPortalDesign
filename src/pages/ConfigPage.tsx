@@ -50,8 +50,12 @@ export function ConfigPage() {
   const [selectedKey, setSelectedKey] = useState<ConfigKey>('mail-server');
   const { globalSecuritySettings, setGlobalSecuritySettings } = useSecuritySettings();
   const { globalLogLevel, setGlobalLogLevel } = useDiagnosticSettings();
-  const { globalAttachmentStorageSettings, setGlobalAttachmentStorageSettings } =
-    useStorageSettings();
+  const {
+    globalAttachmentStorageSettings,
+    setGlobalAttachmentStorageSettings,
+    globalAppStorageSettings,
+    setGlobalAppStorageSettings,
+  } = useStorageSettings();
 
   return (
     <div className="config-page">
@@ -101,9 +105,13 @@ export function ConfigPage() {
 
         {selectedKey === 'storage-path' ? (
           <AttachmentStorageSettingsPanel
-            title="附件存储设置"
+            title="存储路径"
             value={globalAttachmentStorageSettings}
             onChange={setGlobalAttachmentStorageSettings}
+            appStorageValue={globalAppStorageSettings}
+            onAppStorageChange={setGlobalAppStorageSettings}
+            showAppStorageGroup
+            hidePanelTitle
           />
         ) : null}
 
@@ -281,7 +289,12 @@ useSSL=false`;
 
       <div className="general-subtab-actions user-db-actions">
         {!isSqlite ? <Button className="light-action-button">测试连接</Button> : null}
-        <Button type="primary" className="primary-action-button" onClick={handleSave} loading={isSaving}>
+        <Button
+          type="primary"
+          className="primary-action-button"
+          onClick={handleSave}
+          loading={isSaving}
+        >
           保存
         </Button>
       </div>
@@ -290,7 +303,12 @@ useSSL=false`;
         open={saveErrorOpen}
         onCancel={() => setSaveErrorOpen(false)}
         footer={[
-          <Button key="retry" type="primary" className="primary-action-button" onClick={() => setSaveErrorOpen(false)}>
+          <Button
+            key="retry"
+            type="primary"
+            className="primary-action-button"
+            onClick={() => setSaveErrorOpen(false)}
+          >
             知道了
           </Button>,
         ]}

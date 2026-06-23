@@ -11,12 +11,20 @@ export type AttachmentStorageSettings = {
   publicUrlStrategy: string;
 };
 
+export type AppStorageSettings = {
+  appPath: string;
+};
+
 export const defaultAttachmentStorageSettings: AttachmentStorageSettings = {
   storageMode: 'local',
   localPath: 'uploads',
   cloudStorageKey: 'storage-3',
   cloudPath: 'uploads',
   publicUrlStrategy: 'Phoenix 代理下载 URL',
+};
+
+export const defaultAppStorageSettings: AppStorageSettings = {
+  appPath: 'D:\\grapecity-java\\phoenix\\workspace1',
 };
 
 type StorageSettingsContextValue = {
@@ -26,6 +34,10 @@ type StorageSettingsContextValue = {
   setGlobalAttachmentStorageSettings: React.Dispatch<
     React.SetStateAction<AttachmentStorageSettings>
   >;
+  globalAppStorageSettings: AppStorageSettings;
+  setGlobalAppStorageSettings: React.Dispatch<React.SetStateAction<AppStorageSettings>>;
+  effectiveAppStoragePath: string;
+  setEffectiveAppStoragePath: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const StorageSettingsContext = createContext<StorageSettingsContextValue | null>(null);
@@ -34,6 +46,11 @@ export function StorageSettingsProvider({ children }: { children: ReactNode }) {
   const [cloudStorageItems, setCloudStorageItems] = useState<CloudStorageItem[]>(cloudStorages);
   const [globalAttachmentStorageSettings, setGlobalAttachmentStorageSettings] =
     useState<AttachmentStorageSettings>(defaultAttachmentStorageSettings);
+  const [globalAppStorageSettings, setGlobalAppStorageSettings] =
+    useState<AppStorageSettings>(defaultAppStorageSettings);
+  const [effectiveAppStoragePath, setEffectiveAppStoragePath] = useState(
+    defaultAppStorageSettings.appPath
+  );
 
   const value = useMemo(
     () => ({
@@ -41,8 +58,17 @@ export function StorageSettingsProvider({ children }: { children: ReactNode }) {
       setCloudStorageItems,
       globalAttachmentStorageSettings,
       setGlobalAttachmentStorageSettings,
+      globalAppStorageSettings,
+      setGlobalAppStorageSettings,
+      effectiveAppStoragePath,
+      setEffectiveAppStoragePath,
     }),
-    [cloudStorageItems, globalAttachmentStorageSettings]
+    [
+      cloudStorageItems,
+      globalAttachmentStorageSettings,
+      globalAppStorageSettings,
+      effectiveAppStoragePath,
+    ]
   );
 
   return (
