@@ -1905,6 +1905,50 @@ input {
   margin-top: 22px;
 }
 
+.user-db-save-error-modal .ant-modal-content {
+  padding: 24px 24px 18px;
+  border-radius: 10px;
+}
+
+.user-db-save-error-modal .ant-modal-body {
+  padding: 0;
+}
+
+.user-db-save-error-modal .ant-modal-footer {
+  margin-top: 24px;
+}
+
+.user-db-save-error-modal-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.user-db-save-error-modal-icon {
+  font-size: 24px;
+  color: #ff4d4f;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.user-db-save-error-modal-content {
+  min-width: 0;
+}
+
+.user-db-save-error-modal-title {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #101828;
+}
+
+.user-db-save-error-modal-text {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 24px;
+  color: #475467;
+}
+
 .diagnostic-level-panel {
   width: 680px;
   max-width: 100%;

@@ -1,5 +1,13 @@
-import { Button, Input, InputNumber, Select, Switch } from 'antd';
-import { type ReactNode, useState } from 'react';
+import {
+  Button,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Switch,
+} from 'antd';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { type ReactNode, useEffect, useState } from 'react';
 import { AttachmentStorageSettingsPanel } from '../components/AttachmentStorageSettingsPanel';
 import { DiagnosticLogLevelPanel } from '../components/DiagnosticLogLevelPanel';
 import { useDiagnosticSettings } from '../components/DiagnosticSettingsContext';
@@ -121,6 +129,8 @@ function UserDatabaseConfigPanel() {
   const [minIdleConnections, setMinIdleConnections] = useState(0);
   const [initialConnections, setInitialConnections] = useState(0);
   const [customParams, setCustomParams] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveErrorOpen, setSaveErrorOpen] = useState(false);
 
   const isSqlite = databaseType === 'SQLite';
   const protocolMap: Record<DatabaseType, string> = {
@@ -135,6 +145,25 @@ function UserDatabaseConfigPanel() {
 示例：
 characterEncoding=UTF-8
 useSSL=false`;
+
+  useEffect(() => {
+    if (!isSaving) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => {
+      setIsSaving(false);
+      setSaveErrorOpen(true);
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [isSaving, isSqlite]);
+
+  const handleSave = () => {
+    setIsSaving(true);
+  };
 
   return (
     <div className="config-placeholder-card user-db-config-card">
@@ -171,10 +200,7 @@ useSSL=false`;
             </DatabaseField>
 
             <DatabaseField label="密码" required>
-              <Input.Password
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
+              <Input.Password value={password} onChange={(event) => setPassword(event.target.value)} />
             </DatabaseField>
 
             <DatabaseField label="端口号" required>
@@ -255,10 +281,36 @@ useSSL=false`;
 
       <div className="general-subtab-actions user-db-actions">
         {!isSqlite ? <Button className="light-action-button">测试连接</Button> : null}
-        <Button type="primary" className="primary-action-button">
+        <Button type="primary" className="primary-action-button" onClick={handleSave} loading={isSaving}>
           保存
         </Button>
       </div>
+
+      <Modal
+        open={saveErrorOpen}
+        onCancel={() => setSaveErrorOpen(false)}
+        footer={[
+          <Button key="retry" type="primary" className="primary-action-button" onClick={() => setSaveErrorOpen(false)}>
+            知道了
+          </Button>,
+        ]}
+        width={640}
+        centered
+        className="user-db-save-error-modal"
+        title={null}
+      >
+        <div className="user-db-save-error-modal-body">
+          <CloseCircleFilled className="user-db-save-error-modal-icon" />
+          <div className="user-db-save-error-modal-content">
+            <div className="user-db-save-error-modal-title">保存失败</div>
+            <div className="user-db-save-error-modal-text">
+              {isSqlite
+                ? 'SQLite 用户数据库配置保存失败，请检查当前配置后重试。'
+                : 'Server 用户数据库保存或迁移失败，请根据配置和数据库状态检查后重试。'}
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
