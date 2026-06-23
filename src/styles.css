@@ -1756,6 +1756,138 @@ input {
   margin-top: 14px;
 }
 
+.user-db-config-card {
+  width: 100%;
+  max-width: 1040px;
+}
+
+.user-db-advanced-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 36px;
+  margin-top: 16px;
+}
+
+.user-db-advanced-column {
+  min-width: 0;
+}
+
+.user-db-advanced-column-right {
+  padding-left: 36px;
+  border-left: 1px solid #e7e9ef;
+}
+
+.user-db-advanced-column-right .user-db-advanced-row {
+  grid-template-columns: 126px minmax(0, 1fr);
+}
+
+.user-db-advanced-row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  min-height: 44px;
+}
+
+.user-db-advanced-row + .user-db-advanced-row {
+  margin-top: 12px;
+}
+
+.user-db-advanced-row-textarea {
+  align-items: start;
+}
+
+.user-db-advanced-row-inline {
+  grid-template-columns: 1fr auto;
+}
+
+.user-db-advanced-label {
+  color: #344054;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.user-db-advanced-label.is-required::before {
+  content: '*';
+  color: #f04438;
+  margin-right: 4px;
+}
+
+.user-db-advanced-control {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-db-advanced-control .ant-input,
+.user-db-advanced-control .ant-input-affix-wrapper,
+.user-db-advanced-control .ant-select-selector,
+.user-db-advanced-control .ant-input-number,
+.user-db-advanced-control .ant-input-number-input,
+.user-db-advanced-control .ant-input-textarea textarea {
+  border-radius: 4px !important;
+  border-color: #d0d5dd !important;
+  box-shadow: none !important;
+  font-size: 14px;
+}
+
+.user-db-advanced-control .ant-input,
+.user-db-advanced-control .ant-input-affix-wrapper,
+.user-db-advanced-control .ant-select,
+.user-db-advanced-control .ant-input-number,
+.user-db-advanced-control .ant-input-textarea {
+  width: 378px;
+  max-width: 100%;
+}
+
+.user-db-advanced-control .ant-input,
+.user-db-advanced-control .ant-input-affix-wrapper,
+.user-db-advanced-control .ant-select-single,
+.user-db-advanced-control .ant-input-number {
+  min-height: 32px;
+}
+
+.user-db-advanced-control .ant-input-affix-wrapper {
+  height: 32px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.user-db-advanced-control .ant-select-single .ant-select-selector {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.user-db-advanced-control .ant-input-affix-wrapper input {
+  height: 30px;
+}
+
+.user-db-advanced-control .ant-input-number-input {
+  height: 30px;
+}
+
+.user-db-advanced-control .ant-input-textarea textarea {
+  min-height: 118px !important;
+  resize: none;
+}
+
+.user-db-switch-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.user-db-advanced-suffix {
+  color: #344054;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
 .attachment-storage-card {
   width: 680px;
   max-width: 100%;
@@ -1768,16 +1900,9 @@ input {
   margin-top: 14px;
 }
 
-.user-db-connection-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  width: 680px;
-  max-width: 100%;
-}
-
-.user-db-connection-input {
-  flex: 1;
+.user-db-actions {
+  gap: 16px;
+  margin-top: 22px;
 }
 
 .diagnostic-level-panel {

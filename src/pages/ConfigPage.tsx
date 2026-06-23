@@ -1,5 +1,5 @@
-import { Button, Input, Select } from 'antd';
-import { useState } from 'react';
+import { Button, Input, InputNumber, Select, Switch } from 'antd';
+import { type ReactNode, useState } from 'react';
 import { AttachmentStorageSettingsPanel } from '../components/AttachmentStorageSettingsPanel';
 import { DiagnosticLogLevelPanel } from '../components/DiagnosticLogLevelPanel';
 import { useDiagnosticSettings } from '../components/DiagnosticSettingsContext';
@@ -27,6 +27,16 @@ type ConfigKey =
   | 'backup-restore'
   | 'storage-path'
   | 'user-db';
+
+type DatabaseType = 'SQLite' | 'MySql' | 'SqlServer' | 'Postgresql' | '达梦';
+
+const databaseOptions = [
+  { label: 'SQLite', value: 'SQLite' },
+  { label: 'MySql', value: 'MySql' },
+  { label: 'sqlserver', value: 'SqlServer' },
+  { label: 'Postgresql', value: 'Postgresql' },
+  { label: '达梦', value: '达梦' },
+] satisfies Array<{ label: string; value: DatabaseType }>;
 
 export function ConfigPage() {
   const [selectedKey, setSelectedKey] = useState<ConfigKey>('mail-server');
@@ -96,60 +106,188 @@ export function ConfigPage() {
 }
 
 function UserDatabaseConfigPanel() {
-  const [databaseType, setDatabaseType] = useState<
-    'SQLite' | 'MySql' | 'SqlServer' | 'Postgresql' | '达梦'
-  >('SQLite');
-  const [connectionString, setConnectionString] = useState('');
+  const [databaseType, setDatabaseType] = useState<DatabaseType>('SQLite');
+  const [description, setDescription] = useState('-');
+  const [host, setHost] = useState('10.32.6.108');
+  const [username, setUsername] = useState('postgres');
+  const [password, setPassword] = useState('12345678');
+  const [port, setPort] = useState('5432');
+  const [databaseName, setDatabaseName] = useState('BugX');
+  const [jdbcParams, setJdbcParams] = useState('');
+  const [enablePool, setEnablePool] = useState(true);
+  const [maxWaitTime, setMaxWaitTime] = useState(3000);
+  const [socketTimeout, setSocketTimeout] = useState(60000);
+  const [maxActiveConnections, setMaxActiveConnections] = useState(8);
+  const [minIdleConnections, setMinIdleConnections] = useState(0);
+  const [initialConnections, setInitialConnections] = useState(0);
+  const [customParams, setCustomParams] = useState('');
 
   const isSqlite = databaseType === 'SQLite';
+  const protocolMap: Record<DatabaseType, string> = {
+    SQLite: 'sqlite',
+    MySql: 'mysql',
+    SqlServer: 'sqlserver',
+    Postgresql: 'postgresql',
+    达梦: 'dm',
+  };
+  const jdbcUrl = `jdbc:${protocolMap[databaseType]}://${host}:${port}/${databaseName}`;
+  const paramsPlaceholder = `每行一条，格式：key=value
+示例：
+characterEncoding=UTF-8
+useSSL=false`;
 
   return (
-    <div className="config-placeholder-card">
+    <div className="config-placeholder-card user-db-config-card">
       <div className="config-placeholder-title">管理控制台的用户信息数据库设置</div>
 
-      <div className="user-db-form">
-        <div className="security-form-row">
-          <div className="security-form-label">
-            <span>数据库类型</span>
-          </div>
-          <div className="security-form-control">
-            <Select
-              value={databaseType}
-              onChange={setDatabaseType}
-              options={[
-                { label: 'SQLite', value: 'SQLite' },
-                { label: 'MySql', value: 'MySql' },
-                { label: 'sqlserver', value: 'SqlServer' },
-                { label: 'Postgresql', value: 'Postgresql' },
-                { label: '达梦', value: '达梦' },
-              ]}
-            />
-          </div>
-        </div>
-
-        <div className="security-form-row">
-          <div className="security-form-label">
-            <span>数据库连接字符串</span>
-          </div>
-          <div className="user-db-connection-row">
-            <div className="security-form-control user-db-connection-input">
-              <Input
-                value={connectionString}
-                onChange={(event) => setConnectionString(event.target.value)}
-                disabled={isSqlite}
-              />
+      {isSqlite ? (
+        <div className="user-db-form">
+          <div className="security-form-row">
+            <div className="security-form-label">
+              <span>数据库类型</span>
             </div>
-            <Button className="light-action-button" disabled={isSqlite}>
-              测试连接
-            </Button>
+            <div className="security-form-control">
+              <Select value={databaseType} onChange={setDatabaseType} options={databaseOptions} />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="user-db-advanced-layout">
+          <div className="user-db-advanced-column">
+            <DatabaseField label="数据源类型">
+              <Select value={databaseType} onChange={setDatabaseType} options={databaseOptions} />
+            </DatabaseField>
 
-      <div className="general-subtab-actions">
+            <DatabaseField label="数据源描述">
+              <Input value={description} onChange={(event) => setDescription(event.target.value)} />
+            </DatabaseField>
+
+            <DatabaseField label="服务器名" required>
+              <Input value={host} onChange={(event) => setHost(event.target.value)} />
+            </DatabaseField>
+
+            <DatabaseField label="用户名" required>
+              <Input value={username} onChange={(event) => setUsername(event.target.value)} />
+            </DatabaseField>
+
+            <DatabaseField label="密码" required>
+              <Input.Password
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </DatabaseField>
+
+            <DatabaseField label="端口号" required>
+              <Input value={port} onChange={(event) => setPort(event.target.value)} />
+            </DatabaseField>
+
+            <DatabaseField label="数据库" required>
+              <Select
+                value={databaseName}
+                onChange={setDatabaseName}
+                options={[
+                  { label: 'BugX', value: 'BugX' },
+                  { label: 'Phoenix', value: 'Phoenix' },
+                  { label: 'AdminPortal', value: 'AdminPortal' },
+                ]}
+              />
+            </DatabaseField>
+
+            <DatabaseField label="URL">
+              <Input value={jdbcUrl} readOnly />
+            </DatabaseField>
+
+            <DatabaseField label="JDBC URL参数" multiline>
+              <Input.TextArea
+                value={jdbcParams}
+                onChange={(event) => setJdbcParams(event.target.value)}
+                autoSize={{ minRows: 4, maxRows: 4 }}
+                placeholder={paramsPlaceholder}
+              />
+            </DatabaseField>
+          </div>
+
+          <div className="user-db-advanced-column user-db-advanced-column-right">
+            <DatabaseField label="是否启用连接池？" inline>
+              <Switch checked={enablePool} onChange={setEnablePool} />
+            </DatabaseField>
+
+            <DatabaseField label="最大等待时间" suffix="毫秒">
+              <InputNumber value={maxWaitTime} onChange={(value) => setMaxWaitTime(value ?? 0)} />
+            </DatabaseField>
+
+            <DatabaseField label="Socket 超时时间" suffix="毫秒">
+              <InputNumber value={socketTimeout} onChange={(value) => setSocketTimeout(value ?? 0)} />
+            </DatabaseField>
+
+            <DatabaseField label="最大连接数">
+              <InputNumber
+                value={maxActiveConnections}
+                onChange={(value) => setMaxActiveConnections(value ?? 0)}
+              />
+            </DatabaseField>
+
+            <DatabaseField label="最少空闲连接数">
+              <InputNumber
+                value={minIdleConnections}
+                onChange={(value) => setMinIdleConnections(value ?? 0)}
+              />
+            </DatabaseField>
+
+            <DatabaseField label="初始化连接数">
+              <InputNumber
+                value={initialConnections}
+                onChange={(value) => setInitialConnections(value ?? 0)}
+              />
+            </DatabaseField>
+
+            <DatabaseField label="自定义参数" multiline>
+              <Input.TextArea
+                value={customParams}
+                onChange={(event) => setCustomParams(event.target.value)}
+                autoSize={{ minRows: 4, maxRows: 4 }}
+                placeholder={paramsPlaceholder}
+              />
+            </DatabaseField>
+          </div>
+        </div>
+      )}
+
+      <div className="general-subtab-actions user-db-actions">
+        {!isSqlite ? <Button className="light-action-button">测试连接</Button> : null}
         <Button type="primary" className="primary-action-button">
           保存
         </Button>
+      </div>
+    </div>
+  );
+}
+
+function DatabaseField({
+  label,
+  children,
+  required = false,
+  multiline = false,
+  inline = false,
+  suffix,
+}: {
+  label: string;
+  children: ReactNode;
+  required?: boolean;
+  multiline?: boolean;
+  inline?: boolean;
+  suffix?: string;
+}) {
+  return (
+    <div
+      className={`user-db-advanced-row ${multiline ? 'user-db-advanced-row-textarea' : ''} ${
+        inline ? 'user-db-advanced-row-inline' : ''
+      }`}
+    >
+      <div className={`user-db-advanced-label ${required ? 'is-required' : ''}`}>{label}：</div>
+      <div className="user-db-advanced-control">
+        {children}
+        {suffix ? <span className="user-db-advanced-suffix">{suffix}</span> : null}
       </div>
     </div>
   );
