@@ -60,6 +60,7 @@ export const initialRoles: RoleItem[] = [
 export type AppItem = {
   key: string;
   name: string;
+  isRemote?: boolean;
   status: '运行中' | '启动中' | '已停止' | '异常';
   address: string;
   port: string;
@@ -73,6 +74,7 @@ export const applications: AppItem[] = [
   {
     key: 'app1',
     name: '应用1',
+    isRemote: true,
     status: '运行中',
     address: 'http://10.32.6.108:8001',
     port: '8001',
@@ -84,6 +86,7 @@ export const applications: AppItem[] = [
   {
     key: 'app2',
     name: '应用2',
+    isRemote: true,
     status: '启动中',
     address: 'http://10.32.6.108:8000',
     port: '8000',
@@ -91,6 +94,54 @@ export const applications: AppItem[] = [
     publishTime: '2026/2/24 09:19:36',
     healthTime: '2026/2/25 15:34:57',
     version: '-',
+  },
+  {
+    key: 'app3',
+    name: '企业综合业务管理平台_华东区域生产环境',
+    isRemote: true,
+    status: '运行中',
+    address: 'http://10.32.6.108:8002',
+    port: '8002',
+    startTime: '2026/2/24 10:20:00',
+    publishTime: '2026/2/24 10:18:00',
+    healthTime: '2026/2/25 15:34:57',
+    version: '1.2.0',
+  },
+  {
+    key: 'app4',
+    name: '客户关系与销售订单协同管理系统_测试环境',
+    isRemote: true,
+    status: '运行中',
+    address: 'http://10.32.6.108:8003',
+    port: '8003',
+    startTime: '2026/2/24 11:05:00',
+    publishTime: '2026/2/24 11:00:00',
+    healthTime: '2026/2/25 15:34:57',
+    version: '2.0.1',
+  },
+  {
+    key: 'app5',
+    name: '库存管理',
+    isRemote: true,
+    status: '已停止',
+    address: 'http://10.32.6.108:8004',
+    port: '8004',
+    startTime: '-',
+    publishTime: '2026/2/24 13:30:00',
+    healthTime: '2026/2/25 14:00:00',
+    version: '1.0.0',
+  },
+  {
+    key: 'app6',
+    name: '供应链采购审批与供应商协作平台_华南分公司',
+    isRemote: true,
+    status: '异常',
+    address: 'http://10.32.6.108:8005',
+    port: '8005',
+    startTime: '2026/2/24 14:10:00',
+    publishTime: '2026/2/24 14:08:00',
+    healthTime: '2026/2/25 15:30:00',
+    version: '1.1.0',
   },
 ];
 

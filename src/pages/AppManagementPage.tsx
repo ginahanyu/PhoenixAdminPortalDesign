@@ -5,6 +5,7 @@ import {
   MoreOutlined,
   PauseCircleOutlined,
   PlayCircleOutlined,
+  PlusOutlined,
   RocketOutlined,
   AppstoreOutlined,
 } from '@ant-design/icons';
@@ -60,7 +61,7 @@ export function AppManagementPage() {
         <table className="design-table">
           <thead>
             <tr>
-              <th>应用名称</th>
+              <th className="app-name-column">应用名称</th>
               <th>状态</th>
               <th>应用地址</th>
               <th>端口</th>
@@ -74,10 +75,20 @@ export function AppManagementPage() {
           <tbody>
             {apps.map((app) => (
               <tr key={app.key}>
-                <td>
-                  <Link to={`/applications/${app.key}`} className="table-link">
-                    {app.name}
-                  </Link>
+                <td className="app-name-column">
+                  <div className="app-name-cell">
+                    <span className="app-name-icon" aria-hidden="true">
+                      <PlusOutlined />
+                    </span>
+                    <Link
+                      to={`/applications/${app.key}`}
+                      className="table-link app-name-link"
+                      title={app.name}
+                    >
+                      {app.name}
+                    </Link>
+                    {app.isRemote ? <span className="app-remote-tag">远程</span> : null}
+                  </div>
                 </td>
                 <td>
                   <span className={`status-pill ${statusClassName[app.status]}`}>{app.status}</span>

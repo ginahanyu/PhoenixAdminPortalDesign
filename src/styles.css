@@ -408,6 +408,55 @@ input {
   white-space: nowrap;
 }
 
+.app-name-column {
+  width: 282px;
+  max-width: 282px;
+}
+
+.app-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.app-name-link {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-name-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #e4e7ec;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #667085;
+  font-size: 12px;
+}
+
+.app-remote-tag {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: #e6f4ff;
+  color: #1677ff;
+  font-size: 12px;
+  line-height: 20px;
+}
+
 .checkbox-col {
   width: 46px;
 }
